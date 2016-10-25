@@ -1,0 +1,20 @@
+{
+  "name": {{ name }},
+  "api_name": {{ api_name }},
+  "is_master": {{ is_master }},
+  "endpoints": [
+    {{ endpoints }}
+  ],
+  "master_zone": {{ master_zone }},
+  "zones": [
+    {{ zones }}
+  ],
+  "placement_targets": [
+    {{ placement_targets }}
+  ],
+{% if default_placement is not none %}
+"default_placement": {{ default_placement }}
+{% else %}
+"default_placement": "default-placement"
+{% endif %}
+}

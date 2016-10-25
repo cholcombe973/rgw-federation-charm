@@ -1,14 +1,53 @@
 options:
-  string-option:
-    type: string
-    default: "Default Value"
-    description: "A short description of the configuration option"
-  boolean-option:
+  #Master region stuff
+  master:
     type: boolean
-    default: False
-    description: "A short description of the configuration option"
-  int-option:
-    type: int
-    default: 9001
-    description: "A short description of the configuration option"
+    default: true
+    description: "Set this to false if this subordinate is the remote region"
+  master-cephx-user:
+    type: string
+    description: "The cephx key to use for the master region"
+  master-zone-user:
+    type: string
+    description: "The master zone json file"
+  #Remote region stuff
+  remote-ceph-mon-ip-list:
+    type: string
+    description: "The list of monitor ip addresses in the remote ceph cluster"
+  remote-zone-name:
+    type: string
+    description: |
+      "The name of the remote zone.  Example eu for europe. A zone is a
+      logical grouping of one or more Ceph Object Gateway instance(s).
+      A region has a master zone that processes client requests."
+  remote-region-name:
+    type: string
+    description: |
+      "The name of the remote region.  Example west for eu.west A
+      region represents a logical geographic area and contains one
+      or more zones. A cluster with multiple regions must specify a master
+      region."
+  remote-cephx-user:
+    type: string
+    description: "The cephx key to use to talk to the backup region"
+  #Key file information
+  master-access-key:
+    type: string
+    description: "The s3 access key to talk to the master region"
+  remote-secret-key:
+    type: string
+    description: "The s3 access key to talk to the master region"
+  remote-access-key:
+    type: string
+    description: "The s3 access key to talk to the remote region"
+  remote-secret-key:
+    type: string
+    description: "The s3 secret key to talk to the remote region"
+  remote-region-url:
+    type: string
+    description: "The url for the remote region rados gateway"
+  sync-log-file:
+    type: string
+    default: "/var/log/radosgw/radosgw-sync.log"
+    description: "The location to store radosgw sync logs"
 

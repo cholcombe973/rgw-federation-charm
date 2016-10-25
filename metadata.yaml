@@ -1,19 +1,12 @@
-name: federation
-summary: <Fill in summary here>
-maintainer: chris <chris@chris-HP-Z400-Workstation>
+name: rgw-federation
+summary: Subordinate charm to federate two rados gateways
+maintainer: chris.holcombe@canonical.com
 description: |
-  <Multi-line description here>
+  RadosGW federation allows one Ceph clusters to backup
+  to another one.
 tags:
-  # Replace "misc" with one or more whitelisted tags from this list:
-  # https://jujucharms.com/docs/stable/authors-charm-metadata
   - misc
-subordinate: false
-provides:
-  provides-relation:
-    interface: interface-name
+subordinate: true
 requires:
-  requires-relation:
-    interface: interface-name
-peers:
-  peer-relation:
-    interface: interface-name
+  federation:
+    interface: radosgw
