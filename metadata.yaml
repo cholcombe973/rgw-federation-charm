@@ -2,11 +2,13 @@ name: rgw-federation
 summary: Subordinate charm to federate two rados gateways
 maintainer: chris.holcombe@canonical.com
 description: |
-  RadosGW federation allows one Ceph clusters to backup
+  RadosGW federation allows one Ceph cluster to backup
   to another one.
 tags:
   - misc
 subordinate: true
+series: ['xenial']
 requires:
-  federation:
-    interface: radosgw
+  radosgw:
+    scope: container
+    interface: http

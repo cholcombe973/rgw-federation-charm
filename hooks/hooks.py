@@ -66,13 +66,13 @@ def generate_rgw_agent_config_file():
     context = {
         'src_zone': '',
         'source_s3_endpoint': '',
-        'main_user_access': '',
-        'main_user_secret': '',
-        'dest_zone': '',
-        'dest_s3_endpoint': '',
-        'fallback_user_access': '',
-        'fallback_user_secret': '',
-        'log_file_location': '',
+        'main_user_access': config('master-access-key'),
+        'main_user_secret': config('master-secret-key'),
+        'dest_zone': config('remote-zone-name'),
+        'dest_s3_endpoint': config('remote-region-url'),
+        'fallback_user_access': config(''),
+        'fallback_user_secret': config(''),
+        'log_file_location': config('sync-log-location'),
     }
     try:
         with open(zone_file_location, 'w') as zone_file:
@@ -109,11 +109,17 @@ def generate_zone_file():
 
 
 def start_agent():
+    agent_directory = os.path.join(os.sep,
+                                   'var', 'lib', 'ceph', 'radosgw',
+                                   'ceph-radosgw.{region}-{zone}'.format(
+                                       zone=config('remote-zone-name'),
+                                       remote=config('remove-region-name')))
+    if not os.path.exists(agent_directory):
+        os.mkdir(agent_directory)
     try:
         service_restart('radosgw-agent')
     except subprocess.CalledProcessError as err:
         log(message='Error: {}'.format(err), level=ERROR)
-    pass
 
 
 @hooks.hook('install')
@@ -121,10 +127,25 @@ def install_agent():
     apt_install(['radosgw-agent'])
 
 
-@hooks.hook('federation.joined')
-@hooks.hook('federation.changed')
+def configure_zone():
+    """
+        radosgw-admin region set --name client.radosgw.main < region.conf.json
+        radosgw-admin zone set --rgw-zone=main --name client.radosgw.main < zone-main.conf.json
+        radosgw-admin zone set --rgw-zone=fallback --name client.radosgw.main < zone-fallback.conf.json
+        radosgw-admin regionmap update --name client.radosgw.main
+
+        radosgw-admin user create --uid="main" --display-name="Zone main" --name client.radosgw.main --system --access-key={MAIN_USER_ACCESS} --secret={MAIN_USER_SECRET}
+        radosgw-admin user create --uid="fallback" --display-name="Zone fallback" --name client.radosgw.main --system --access-key={FALLBACK_USER_ACESS} --secret={FALLBACK_USER_SECRET}
+  """
+
+
+@hooks.hook('radosgw.joined')
+@hooks.hook('radosgw.changed')
 def federation():
-    pass
+    generate_region_file()
+    generate_rgw_agent_config_file()
+    generate_zone_file()
+    start_agent()
 
 
 if __name__ == '__main__':

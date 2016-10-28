@@ -1,50 +1,61 @@
 options:
-  #Master region stuff
+  #Master region settings
   master:
     type: boolean
     default: true
-    description: "Set this to false if this subordinate is the remote region"
+    description: "Set this to false if this is the remote region"
   master-cephx-user:
     type: string
+    default: "admin"
     description: "The cephx key to use for the master region"
   master-zone-user:
     type: string
+    default: ""
     description: "The master zone json file"
-  #Remote region stuff
+  #Remote region settings
   remote-ceph-mon-ip-list:
     type: string
+    default: ""
     description: "The list of monitor ip addresses in the remote ceph cluster"
   remote-zone-name:
     type: string
+    default: "remote-zone"
     description: |
-      "The name of the remote zone.  Example eu for europe. A zone is a
+      The name of the remote zone.  Example eu for europe. A zone is a
       logical grouping of one or more Ceph Object Gateway instance(s).
-      A region has a master zone that processes client requests."
+      A region has a master zone that processes client requests.
   remote-region-name:
     type: string
+    default: "remote"
     description: |
-      "The name of the remote region.  Example west for eu.west A
+      The name of the remote region.  Example west for eu.west A
       region represents a logical geographic area and contains one
       or more zones. A cluster with multiple regions must specify a master
-      region."
+      region.
   remote-cephx-user:
     type: string
+    default: ""
     description: "The cephx key to use to talk to the backup region"
   #Key file information
   master-access-key:
     type: string
+    default: ""
     description: "The s3 access key to talk to the master region"
-  remote-secret-key:
+  master-secret-key:
     type: string
-    description: "The s3 access key to talk to the master region"
+    default: ""
+    description: "The s3 secret key to talk to the master region"
   remote-access-key:
     type: string
+    default: ""
     description: "The s3 access key to talk to the remote region"
   remote-secret-key:
     type: string
+    default: ""
     description: "The s3 secret key to talk to the remote region"
   remote-region-url:
     type: string
+    default: ""
     description: "The url for the remote region rados gateway"
   sync-log-file:
     type: string
